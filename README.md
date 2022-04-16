@@ -1,7 +1,7 @@
 # PetFeeder
 A simulation of an arduino pet feeder
 
-Documentation:
+Process:
 1. Coming up with the idea
 
 2. Making a list of the needed components
