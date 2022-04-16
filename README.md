@@ -8,5 +8,5 @@ Process:
 
 3. Figuring out how to work with Tinkercad
 
-4. Code and block scheme
+4. Code
 
