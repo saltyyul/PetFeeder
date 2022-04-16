@@ -3,6 +3,7 @@
 
 Servo servomotor;
 LiquidCrystal lcd(8,9,4,5,6,7);
+
 int mode = 0;
 const int servoPin = 12;
 
@@ -20,7 +21,6 @@ void setup()
   pinMode(11,INPUT);
   pinMode(2, INPUT);
   pinMode(A0, INPUT); 
-  //attachInterrupt(digitalPinToInterrupt(2), changemode, RISING);
   servomotor.attach(servoPin);
   servomotor.write(0);
   delay(500);
@@ -33,7 +33,8 @@ RIGHT BUTTON - used for removing 1 hour/minute
 */
 void loop()
 {
-    ChangeMode();
+  
+  ChangeMode();
   
   if(mode == 0)
   {
@@ -43,27 +44,26 @@ void loop()
       lcd.print("Pet Feeder V1");
   }
 
-  if(mode == 1)
-  {
-    SetHours();
-  }
+  if(mode == 1) 
+  { 
+    SetHours(); 
+    }
   
-  if(mode == 2)
+  if(mode == 2) 
   {
-    SetMinutes();
-  }
+     SetMinutes(); 
+     }
   
-  if(mode == 3)
-  {
-    Timer();
+  if(mode == 3) 
+  { 
+    Timer(); 
   }
 
   if(mode == 4)
-  {
-    CancelTimer();
+  { 
+     CancelTimer();  
   }
 }
-
 
 /*
 When the most left button ("mode change button") is pressed the mode changes /*
@@ -88,11 +88,13 @@ void ChangeMode()
             h = 0; 
             m = 0;
         } 
-
         delay(1000);
     }
 }
 
+/*
+Sets the hour for the timer
+*/
 void SetHours()
 { 
   if(digitalRead(10) == HIGH)
@@ -124,6 +126,10 @@ void SetHours()
   delay(150);
 }
 
+
+/*
+Set the minutes for the timer
+*/
 void SetMinutes()
 {
   if(digitalRead(10) == HIGH)
@@ -154,6 +160,11 @@ void SetMinutes()
   delay(100);
 }
 
+/*
+A prototype of a real timer
+Uses "delay();" to act as a real timer
+Checks  
+*/
 void Timer()
 {
   if(m > 0)
@@ -172,6 +183,16 @@ void Timer()
   }
 
   Print(0);
+
+  /*
+  1 minute = 60 000 ms = 600 * 100 -> (iterations * delay ms)
+
+  Using a loop of 600 iterations each of which is delayed by 100 ms 
+  allows the user to cancel the timer in intervals of 100 ms.
+
+  If 'delay(60000);' was used the user wouldn't be able to abort the timer 
+  before a minute passes
+  */
   for(int i = 0; i < 600; i ++)
   {
       delay(100);
@@ -186,6 +207,9 @@ void Timer()
 }
 
 /*
+Prints message and time in accordance to the given 'print type' code
+
+CODES:
 0 - none, print only timer
 1 - set hours
 2 - set minutes
@@ -195,7 +219,7 @@ void Print(int type)
   if(type == 1)
   {
    lcd.setCursor(0,0);
-   lcd.print("Setting hour:");
+   lcd.print("Setting hours:");
     PrintTime();
   }
   
@@ -228,6 +252,9 @@ void Print(int type)
   }
 }
 
+/*
+Prints only the time on the second line of the lcd matrix
+*/
 void PrintTime()
 {
   lcd.setCursor(0,1);
@@ -254,6 +281,9 @@ void PrintTime()
   }
 }
 
+/*
+Rotates servomotors wing allowing the food to drop
+*/
 void Feed()
 {
   servomotor.write(90);
@@ -262,6 +292,10 @@ void Feed()
   Serial.println("Pet has just been fed!");
 }
 
+/*
+Cancels the timer
+Set hours and minutes to 0
+*/
 void CancelTimer()
 {
     h = 0;
